@@ -41,6 +41,9 @@ class IslandLive
     private $rows = 10; // y
     private $i = 0; // current tact number
 
+
+    private $current_state = array();
+
     function __construct()
     {
         for ($j = 0; $j < $this->rows; $j++)
@@ -48,16 +51,27 @@ class IslandLive
             for ($i = 0; $i < $this->columns; $i++)
             {
                 $this->island[$j][$i]["landscape"] = self::$types[array_rand(self::$types)]; // will constant
-                $this->island[$j][$i]["sun"] = 0; // will change rand 0...3
-                $this->island[$j][$i]["rain"] = 0; // will change rand 0...3
-                $this->island[$j][$i]["grass"] = 0; // will change  0...5 in depending on sun and rain and landscapes
+                if ($this->island[$j][$i]["landscape"] == self::$types[1] || $this->island[$j][$i]["landscape"] == self::$types[2])
+                {
+                    $this->island[$j][$i]["grass"] = false; // not will change
+                }
+                else
+                {
+                    $this->island[$j][$i]["grass"] = 1; // will change  0...5 in depending on sun and rain and landscapes
+                }
             }
         }
+        $this->current_state = $this->island;
     }
 
     public function GetIsland()
     {
         return $this->island;
+    }
+
+    public function GetCurrentState()
+    {
+        return $this->current_state;
     }
 
     public function GetRows()
@@ -70,7 +84,7 @@ class IslandLive
         return $this->columns;
     }
 
-    public function tactIsland()
+    /*public function tactIsland()
     {
         $this->i++;
         //TODO: пройти по острову и в зависимости от натсроек  составить новое состояние
@@ -84,5 +98,41 @@ class IslandLive
             }
         }
         return $this->island;
+    }
+*/
+    /**
+     * Get Next $count states on island
+     */
+    public function GetStates($count)
+    {
+        $states = array();
+        for ($index = 0; $index < $count; $index++)
+        {
+            $this->i++;
+            //TODO: пройти по острову и в зависимости от натсроек  составить новое состояние
+            for ($j = 0; $j < $this->rows; $j++)
+            {
+                for ($i = 0; $i < $this->columns; $i++)
+                {
+                    $this->current_state[$j][$i]["sun"] = rand(0,3); // will change rand 0...3
+                    $this->current_state[$j][$i]["rain"] = rand(0,3); // will change rand 0...3
+                    if ($this->current_state[$j][$i]["grass"] !== false)
+                    {
+                        $grassStep = self::$weather[$this->current_state[$j][$i]["rain"]][$this->current_state[$j][$i]["sun"]];
+                        if ($this->current_state[$j][$i]["grass"] == 5 && $grassStep == 1)
+                        {
+                            $this->current_state[$j][$i]["grass"] = 5;
+                        }
+                        elseif ($this->current_state[$j][$i]["grass"] == 0 && $grassStep == -1)
+                        {
+                            $this->current_state[$j][$i]["grass"] = 0;
+                        }
+                    }
+
+                }
+            }
+            $states[] = $this->current_state;
+        }
+        return $states;
     }
 }

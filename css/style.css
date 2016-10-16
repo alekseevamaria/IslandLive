@@ -386,3 +386,11 @@ canvas#subLayer
 {
     clear: both;
 }
+
+.hidden
+{
+    display: none;
+}
+.contain {
+    padding: 0;
+}

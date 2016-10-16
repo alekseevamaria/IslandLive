@@ -13,19 +13,19 @@
 
     _itemWidth: null,
     _itemHeight: null,
+
+    _islandConst: [],
     
-    constructor: function(canvasId, subCanvasId, width, height, layer, itemWidth, itemHeight, island)
+    constructor: function(canvasId, subCanvasId, width, height, layer, itemWidth, itemHeight)
     {
         this._itemWidth = itemWidth;
         this._itemHeight = itemHeight;
-
         this._canvas = document.getElementById(canvasId);    
         this._canvasID = canvasId;
         this._secondaryCanvasID = subCanvasId;
         this._resetCanvas(width, height, "#" + Graphic.DEFAULT_COLOR);
         this._resetTools(layer);
-        //this._resetColumnsRows(itemWidth, itemHeight);
-        //this._showInitState(island);
+        this.initIslandGraphic();
         this._setListeners();
         this._cursorId = 1;
         this._lastCursorId = this._cursorId;
@@ -107,7 +107,7 @@
     
     _setListeners: function()
     {        
-        $(window).off(); 
+        $(window).off();
         $("#" + this._canvasID).off();
         $("#" + this._secondaryCanvasID).off();
         
@@ -148,51 +148,112 @@
         this._rectangle = new Rectangle(this._canvasID, layer, this._secondaryCanvasID);
         this._ellipse = new Ellipse(this._canvasID, layer, this._secondaryCanvasID);
 
-        $("#" + Graphic.tools.PENCIL).on(Graphic.event.CLICK, handler(this, "_setActiveTool"));  
+        $("#" + Graphic.tools.PENCIL).on(Graphic.event.CLICK, handler(this, "_setActiveTool"));
         $("#" + Graphic.tools.ERASER).on(Graphic.event.CLICK, handler(this, "_setActiveTool"));
         $("#" + Graphic.tools.RECTANGLE).on(Graphic.event.CLICK, handler(this, "_setActiveTool"));
         $("#" + Graphic.tools.ELLIPSE).on(Graphic.event.CLICK, handler(this, "_setActiveTool"));
-          
-        this._setActiveTool(Graphic.tools.PENCIL);        
+
+        this._setActiveTool(Graphic.tools.PENCIL);
     },
 
-    _resetColumnsRows: function(itemWidth, itemHeight)
+    resetColumnsRows: function()
     {
+        this._setActiveTool(Graphic.tools.PENCIL);
         /*разделяем поле*/
-        for (var j = itemWidth; j < this._canvas.width; j+=itemWidth)
+        for (var j = this._itemWidth; j < this._canvas.width; j+=this._itemWidth)
         {
             this._pencil.drawLine(j, 0, j, this._canvas.width);
         }
-        for (var i = itemHeight; i < this._canvas.height; i+=itemHeight)
+        for (var i = this._itemHeight; i < this._canvas.height; i+=this._itemHeight)
         {
             this._pencil.drawLine(0, i, this._canvas.height, i);
         }
     },
 
-    _showInitState: function(island)
+    initIslandGraphic: function()
+    {
+        var grassImageElement = $("#grass_image");
+        var sunImageElement = $("#sun_image");
+        var rainImageElement = $("#rain_image");
+
+        this._islandConst['images'] = [];
+        this._islandConst['images']['field'] = new Image();
+        this._islandConst['images']['field'].src = "images/icons/field.jpg";
+        this._islandConst['images']['mountain'] = new Image();
+        this._islandConst['images']['mountain'].src = "images/icons/mountain.jpg";
+        this._islandConst['images']['river'] = new Image();
+        this._islandConst['images']['river'].src = "images/icons/river.jpg";
+
+        this._islandConst['images']['grass'] = new Image();
+        this._islandConst['images']['grass'].src = grassImageElement.attr('src');
+        this._islandConst['images']['grass'].height = grassImageElement.attr('height');
+
+        this._islandConst['images']['sun'] = new Image();
+        this._islandConst['images']['sun'].src = sunImageElement.attr('src');
+        this._islandConst['images']['sun'].height = sunImageElement.attr('height');
+        this._islandConst['images']['sun'].width = sunImageElement.attr('width');
+
+        this._islandConst['images']['rain'] = new Image();
+        this._islandConst['images']['rain'].src = rainImageElement.attr('src');
+        this._islandConst['images']['rain'].height = rainImageElement.attr('height');
+        this._islandConst['images']['rain'].width = rainImageElement.attr('width');
+    },
+
+    showInitState: function(island)
     {
         var context = this._canvas.getContext("2d");
-        var img=document.getElementById('river_image');
-        context.drawImage(img,10,10);
+        var that = this;
+        this._islandConst['images']['river'].onload = function() {
+            var landscape = "";
+            var grass = 0;
+            for (var j = 0; j < island.length; j++)
+            {
+                for (var i = 0; i < island[j].length; i++)
+                {
+                    landscape = island[j][i]['landscape'];
+                    grass = island[j][i]['grass'];
+                    context.drawImage(that._islandConst['images'][landscape], i*that._itemWidth, j*that._itemHeight);
+                    if (grass !== false && grass > 0)
+                    {
+                        context.drawImage(that._islandConst['images']['grass'], i*that._itemWidth, j*that._itemHeight + that._itemHeight - that._islandConst['images']['grass'].height);
+                    }
+                }
+            }
+        };
+    },
 
+    showState: function(island)
+    {
+        var context = this._canvas.getContext("2d");
+        var that = this;
+        var sun = 0;
+        var rain = 0;
+        var grass = 0;
+        console.log(island);
         for (var j = 0; j < island.length; j++)
         {
             for (var i = 0; i < island[j].length; i++)
             {
-                var landscape = island[j][i]['landscape'];
-                /*switch (landscape)
+                sun = island[j][i]['sun'];
+                rain = island[j][i]['rain'];
+                grass = island[j][i]['grass'];
+                if (sun > 0)
                 {
-                    case "field":
-                        break;
-                    case "mountain":
-                        break;
-                    case "river":
-                        break;
-                }*/
-                var context = this._canvas.getContext("2d");
-                var img=document.getElementById(landscape+ '_image');
-                context.drawImage(img,i*this._itemWidth,j*this._itemWidth, 0, 0);
-                //console.log(i,j, this._itemWidth, this._itemHeight);
+                    for (var sunIndex = 0; sunIndex < sun; sunIndex++){
+                        context.drawImage(that._islandConst['images']['sun'], i*that._itemWidth+sunIndex*that._islandConst['images']['sun'].width, j*that._itemHeight);
+                    }
+                }
+                if (rain > 0)
+                {
+                    for (var rainIndex = 0; rainIndex < rain; rainIndex++){
+                        context.drawImage(that._islandConst['images']['rain'], i*that._itemWidth+rainIndex*that._islandConst['images']['rain'].width, j*that._itemHeight + that._islandConst['images']['sun'].height);
+                    }
+                }
+
+                if (grass !== false && grass > 0)
+                {
+                    context.drawImage(that._islandConst['images']['grass'], i*that._itemWidth, j*that._itemHeight + that._itemHeight - that._islandConst['images']['grass'].height);
+                }
             }
         }
     },

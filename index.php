@@ -42,11 +42,30 @@
     $width = $itemSidePixel * $islandLive->GetColumns();
     $height = $itemSidePixel * $islandLive->GetRows();
     $islandInit = $islandLive->GetIsland();
+    $islandStates = $islandLive->GetStates(1);
     ?>
     <script type="text/javascript">
         var islandInit = <?= json_encode($islandInit)?>;
+    </script>
+    <script type="text/javascript">
+        var islandStates = <?= json_encode($islandStates)?>;
+    </script>
+    <script type="text/javascript">
         $(document).ready(function() {
-            var initTools = new InitTools("layer", "subLayer", <?=$itemSidePixel?>, <?=$itemSidePixel?>, 3, <?=$islandLive->GetColumns()?>, <?=$islandLive->GetRows()?>, islandInit);
+            var initTools = new InitTools("layer", "subLayer", <?=$itemSidePixel?>, <?=$itemSidePixel?>, 3, <?=$islandLive->GetColumns()?>, <?=$islandLive->GetRows()?>);
+            var graphic = initTools.getGraphic();
+            graphic.resetColumnsRows();
+            graphic.showInitState(islandInit);
+            var i = 0;
+
+            var graphicShowStateInterval = setInterval( function(){
+                graphic.showState(islandStates[i]);
+                i++;
+                if (i== islandStates.length)
+                {
+                    clearInterval(graphicShowStateInterval);
+                }
+            }, 1000);
         });
 
         function setActiveBttn(buttonsClass, bttnId)
@@ -60,7 +79,7 @@
 
 </head>
 <body>
-<div class="nav">
+<div class="nav hidden" >
     <div class="topNav">
         <ul>
             <li class="left"><a href="javascript:void(0)" id="fileMenuBtn">Файл</a></li>
@@ -91,6 +110,11 @@
     <img id="field_image" src="images/icons/field.jpg" alt="" width="<?=$itemSidePixel?>" height="<?=$itemSidePixel?>"/>
     <img id="mountain_image" src="images/icons/mountain.jpg" alt="" width="<?=$itemSidePixel?>" height="<?=$itemSidePixel?>"/>
     <img id="river_image" src="images/icons/river.jpg" alt="" width="<?=$itemSidePixel?>" height="<?=$itemSidePixel?>"/>
+    <img id="grass_image" src="images/icons/grass.png" alt="" width="10" height="21"/>
+    <img id="sun_image" src="images/icons/sun.png" alt="" width="10" height="10"/>
+    <img id="rain_image" src="images/icons/rain.png" alt="" width="10" height="20"/>
+
+
 </div>
 </body>
 </html>

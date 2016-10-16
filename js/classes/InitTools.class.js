@@ -17,7 +17,7 @@
     _itemWidth: null,
     _itemHeight: null,
     
-    constructor: function(canvasId, subCanvasId, itemWidth, itemHeight, filterRadius, columns, rows, island )
+    constructor: function(canvasId, subCanvasId, itemWidth, itemHeight, filterRadius, columns, rows )
     {
         var width = columns * itemWidth;
         var height = rows * itemHeight;
@@ -29,7 +29,7 @@
         this._height = height;
         this._filterRadius = filterRadius;
         this._layer = new Layer(canvasId, subCanvasId);
-        this._graphic = new Graphic(canvasId, subCanvasId, width, height, this._layer, itemWidth, itemHeight, island);
+        this._graphic = new Graphic(canvasId, subCanvasId, width, height, this._layer, itemWidth, itemHeight);
         this._imgloader = new ImageFunctions(canvasId, subCanvasId, this._graphic);
         this._gaussianBlur = new GaussianBlur(canvasId, filterRadius);
         this._edgeDetection = new EdgeDetection(canvasId, filterRadius);
@@ -42,7 +42,11 @@
         var colorTools = new InitColorTools(this._graphic);        
         this._initBttnDialogs();
     },
-    
+
+    getGraphic : function () {
+        return this._graphic;
+    },
+
     _filterOn: function(e)
     {
         this._showOverlay()
