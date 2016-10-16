@@ -5,6 +5,7 @@
     <link href="css/style.css" rel="stylesheet" type="text/css">
     <link href="css/modalwindow.css" rel="stylesheet" type="text/css">
     <link href="css/colpick.css" rel="stylesheet" type="text/css"/>
+    <link href="css/island.css" rel="stylesheet" type="text/css">
 
     <title>Жизнь на острове</title>
 
@@ -42,7 +43,7 @@
     $width = $itemSidePixel * $islandLive->GetColumns();
     $height = $itemSidePixel * $islandLive->GetRows();
     $islandInit = $islandLive->GetIsland();
-    $islandStates = $islandLive->GetStates(1);
+    $islandStates = $islandLive->GetStates(100);
     ?>
     <script type="text/javascript">
         var islandInit = <?= json_encode($islandInit)?>;
@@ -79,6 +80,12 @@
 
 </head>
 <body>
+<div>
+<?
+    include_once 'render_template.php';
+    render_template('island_template.php', array('ISLAND_STATE' => $islandInit));
+?>
+</div>
 <div class="nav hidden" >
     <div class="topNav">
         <ul>
@@ -107,9 +114,9 @@
     <img class="preloader" src="images/loader.gif" alt="preloader" title="preloader">
 </div>
 <div class="hidden">
-    <img id="field_image" src="images/icons/field.jpg" alt="" width="<?=$itemSidePixel?>" height="<?=$itemSidePixel?>"/>
-    <img id="mountain_image" src="images/icons/mountain.jpg" alt="" width="<?=$itemSidePixel?>" height="<?=$itemSidePixel?>"/>
-    <img id="river_image" src="images/icons/river.jpg" alt="" width="<?=$itemSidePixel?>" height="<?=$itemSidePixel?>"/>
+    <img id="field_image" src="images/icons/field.jpg" alt="" width="50" height="50"/>
+    <img id="mountain_image" src="images/icons/mountain.jpg" alt="" width="50" height="50"/>
+    <img id="river_image" src="images/icons/river.jpg" alt="" width="50" height="50"/>
     <img id="grass_image" src="images/icons/grass.png" alt="" width="10" height="21"/>
     <img id="sun_image" src="images/icons/sun.png" alt="" width="10" height="10"/>
     <img id="rain_image" src="images/icons/rain.png" alt="" width="10" height="20"/>

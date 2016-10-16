@@ -229,7 +229,6 @@
         var sun = 0;
         var rain = 0;
         var grass = 0;
-        console.log(island);
         for (var j = 0; j < island.length; j++)
         {
             for (var i = 0; i < island[j].length; i++)

@@ -59,6 +59,8 @@ class IslandLive
                 {
                     $this->island[$j][$i]["grass"] = 1; // will change  0...5 in depending on sun and rain and landscapes
                 }
+                $this->island[$j][$i]["sun"] = rand(0,3); // will change rand 0...3
+                $this->island[$j][$i]["rain"] = rand(0,3); // will change rand 0...3
             }
         }
         $this->current_state = $this->island;
