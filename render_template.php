@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /*
  * example:
  * render_template('form.php', array('FORM_ID' => 'topForm'));

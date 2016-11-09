@@ -37,8 +37,8 @@ class IslandLive
     );
 
     private $island = array();
-    private $columns = 10; // x
-    private $rows = 10; // y
+    private $columns = 5; // x
+    private $rows = 5; // y
     private $i = 0; // current tact number
 
 
@@ -57,10 +57,38 @@ class IslandLive
                 }
                 else
                 {
-                    $this->island[$j][$i]["grass"] = 1; // will change  0...5 in depending on sun and rain and landscapes
+                    $this->island[$j][$i]["grass"] = 0; // will change  0...5 in depending on sun and rain and landscapes
+                }
+                $this->island[$j][$i]["sun"] = rand(0,3); // will change rand 0...3
+                $this->island[$j][$i]["rain"] = rand(0,3); // will change rand 0...3
+
+            }
+        }
+
+        for ($j = 0; $j < $this->rows; $j++)
+        {
+            for ($i = 0; $i < $this->columns; $i++)
+            {
+                $this->island[$j][$i]['isNearWater'] = false;
+                if ($j > 0 && $this->island[$j-1][$i]["landscape"] =='river')
+                {
+                    $this->island[$j][$i]['isNearWater'] = true;
+                }
+                if ($i > 0 && $this->island[$j][$i-1]["landscape"] == 'river')
+                {
+                    $this->island[$j][$i]['isNearWater'] = true;
+                }
+                if ($j < $this->rows-1 && $this->island[$j+1][$i]["landscape"] == 'river')
+                {
+                    $this->island[$j][$i]['isNearWater'] = true;
+                }
+                if ($i+1 < $this->columns && $this->island[$j][$i+1]["landscape"] == 'river')
+                {
+                    $this->island[$j][$i]['isNearWater'] = true;
                 }
             }
         }
+
         $this->current_state = $this->island;
     }
 
@@ -84,22 +112,6 @@ class IslandLive
         return $this->columns;
     }
 
-    /*public function tactIsland()
-    {
-        $this->i++;
-        //TODO: пройти по острову и в зависимости от натсроек  составить новое состояние
-        for ($j = 0; $j < $this->rows; $j++)
-        {
-            for ($i = 0; $i < $this->columns; $i++)
-            {
-                $island[$j][$i]["sun"] = 0;
-                $island[$j][$i]["rain"] = 0;
-                $island[$j][$i]["grass"] = 0;
-            }
-        }
-        return $this->island;
-    }
-*/
     /**
      * Get Next $count states on island
      */
@@ -114,11 +126,21 @@ class IslandLive
             {
                 for ($i = 0; $i < $this->columns; $i++)
                 {
-                    $this->current_state[$j][$i]["sun"] = rand(0,3); // will change rand 0...3
-                    $this->current_state[$j][$i]["rain"] = rand(0,3); // will change rand 0...3
+
+                    if ($this->current_state[$j][$i]["rain"] == 3)
+                    {
+                        $this->current_state[$j][$i]["sun"] = 0;
+                    }
+                    if ($this->current_state[$j][$i]["sun"] == 3)
+                    {
+                        $this->current_state[$j][$i]["rain"] = 0;
+                    }
+
                     if ($this->current_state[$j][$i]["grass"] !== false)
                     {
                         $grassStep = self::$weather[$this->current_state[$j][$i]["rain"]][$this->current_state[$j][$i]["sun"]];
+
+
                         if ($this->current_state[$j][$i]["grass"] == 5 && $grassStep == 1)
                         {
                             $this->current_state[$j][$i]["grass"] = 5;
@@ -127,8 +149,21 @@ class IslandLive
                         {
                             $this->current_state[$j][$i]["grass"] = 0;
                         }
+                        else
+                        {
+                            if ($this->current_state[$j][$i]["sun"] != 0 && $this->island[$j][$i]['isNearWater'])
+                            {
+                                $this->current_state[$j][$i]["grass"] += 1;
+                            }
+                            else
+                            {
+                                $this->current_state[$j][$i]["grass"] += $grassStep;
+                            }
+                        }
                     }
 
+                    $this->current_state[$j][$i]["sun"] = rand(0,3); // will change rand 0...3
+                    $this->current_state[$j][$i]["rain"] = rand(0,3); // will change rand 0...3
                 }
             }
             $states[] = $this->current_state;

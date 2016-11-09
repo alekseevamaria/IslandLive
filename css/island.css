@@ -1,0 +1,133 @@
+.canvas_container {
+    display: none;
+}
+.cell
+{
+    position: relative;
+    display: block;
+    width: 100px;
+    height: 100px;
+    background-color: rgb(177, 138, 100);
+    background-size: cover;
+}
+
+.field
+{
+    background-color: rgb(177, 138, 100);
+}
+
+.mountain
+{
+    background-image: url('../images/icons/mountain.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: 0 18px;
+}
+.river
+{
+    background-color: #2baad4;
+}
+
+.sun {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 40%;
+    height: 40%;
+    display: none;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+.sun.sun_1, .sun.sun_2, .sun.sun_3, .sun.sun_4, .sun.sun_5 {
+    display: block;
+}
+.sun.sun_1 {
+    background-image: url('../images/icons/sun_1.png');
+}
+.sun.sun_2 {
+    background-image: url('../images/icons/sun_2.png');
+}
+.sun.sun_3 {
+    background-image: url('../images/icons/sun_3.png');
+}
+.rain {
+    position: absolute;
+    top: 20%;
+    left: 0;
+    width: 45%;
+    height: 40%;
+    background-repeat: no-repeat;
+    background-size: contain;
+    display: none;
+}
+.rain.rain_1, .rain.rain_2, .rain.rain_3, .rain.rain_4, .rain.rain_5 {
+    display: block;
+}
+.rain.rain_1 {
+    background-image: url('../images/icons/rain_1.png');
+}
+.rain.rain_2 {
+    background-image: url('../images/icons/rain_2.png');
+}
+.rain.rain_3 {
+    background-image: url('../images/icons/rain_3.png');
+}
+.grass {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 30px;
+    height: 43px;
+    background-repeat: repeat;
+    background-image: url('../images/icons/trava.png');
+    display: none;
+}
+.grass.grass_1, .grass.grass_2, .grass.grass_3, .grass.grass_4, .grass.grass_5 {
+    display: block;
+}
+.grass.grass_1 {
+    width: 20%;
+}
+.grass.grass_2 {
+    width: 40%;
+}
+.grass.grass_3 {
+    width: 60%;
+}
+.grass.grass_4 {
+    width: 80%;
+}
+.grass.grass_5 {
+    width: 100%;
+}
+
+
+.rabbit {
+    position: absolute;
+    bottom: 10px;
+    left: 0;
+    width: 25px;
+    height: 46px;
+    background-repeat: repeat;
+    background-image: url('../images/icons/rabbit_12.png');
+    display: none;
+}
+.rabbit.rabbit_1, .rabbit.rabbit_2, .rabbit.rabbit_3 {
+    display: block;
+}
+.rabbit.rabbit_1 {
+    width: 25px;
+}
+.rabbit.rabbit_2 {
+    width: 50px;
+}
+.rabbit.rabbit_3 {
+    width: 75px;
+}
+
+.island_state {
+    display: none;
+}
+.island_state_0 {
+    display: table;
+}
