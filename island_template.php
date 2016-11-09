@@ -22,7 +22,7 @@ $islandState = $ISLAND_STATE;
                     $grass = $islandState[$j][$i]['grass'];
                     $grassClass = ($grass) ? "grass_" . $grass : '';
                     ?>
-                    <span class="cell <?=$landscape?>">
+                    <span class="cell <?=$landscape?>" oncontextmenu="return menu(<?=$j?>, <?=$i?>, event);">
                         <span class="sun <?=$sunClass?>"></span>
                         <span class="rain <?=$rainClass?>"></span>
                         <span class="grass <?=$grassClass?>"></span>
@@ -44,3 +44,4 @@ $islandState = $ISLAND_STATE;
     ?>
     </tbody>
 </table>
+

@@ -37,8 +37,8 @@ class IslandLive
     );
 
     private $island = array();
-    private $columns = 10; // x
-    private $rows = 10; // y
+    private $columns = 5; // x
+    private $rows = 5; // y
     private $i = 0; // current tact number
 
 
@@ -112,22 +112,6 @@ class IslandLive
         return $this->columns;
     }
 
-    /*public function tactIsland()
-    {
-        $this->i++;
-        //TODO: пройти по острову и в зависимости от натсроек  составить новое состояние
-        for ($j = 0; $j < $this->rows; $j++)
-        {
-            for ($i = 0; $i < $this->columns; $i++)
-            {
-                $island[$j][$i]["sun"] = 0;
-                $island[$j][$i]["rain"] = 0;
-                $island[$j][$i]["grass"] = 0;
-            }
-        }
-        return $this->island;
-    }
-*/
     /**
      * Get Next $count states on island
      */
