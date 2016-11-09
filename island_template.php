@@ -27,13 +27,6 @@ $islandState = $ISLAND_STATE;
                         <span class="rain <?=$rainClass?>"></span>
                         <span class="grass <?=$grassClass?>"></span>
                     </span>
-                    <?
-                    //context.drawImage(that._islandConst['images'][landscape], i*that._itemWidth, j*that._itemHeight);
-                    //if ($grass !== false && $grass > 0)
-                    {
-                        //context.drawImage(that._islandConst['images']['grass'], i*that._itemWidth, j*that._itemHeight + that._itemHeight - that._islandConst['images']['grass'].height);
-                    }
-                    ?>
                 </td>
             <?
             }
