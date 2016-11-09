@@ -1,4 +1,4 @@
-﻿<div class="menu_block left" id="mainMenu">
+<div class="menu_block left" id="mainMenu">
   <div class="tools_block left">      
     <a href="javascript: void(0)">
       <img id="pencil" class="button" src="images/pencil.png" alt="pencil">

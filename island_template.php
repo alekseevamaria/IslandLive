@@ -1,7 +1,7 @@
 <?
 $islandState = $ISLAND_STATE;
 ?>
-<table border="0">
+<table border="0" class="island_state island_state_<?=$ISLAND_STATE_INDEX?>">
     <tbody>
     <?php
     for ($j = 0; $j < count($islandState); $j++)

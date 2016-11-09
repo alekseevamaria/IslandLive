@@ -1,4 +1,4 @@
-﻿<!--
+<!--
 black   gray    maroon  red orange yellow green     blue  dark-blue   purple  white
 000     808080  800000  f00 ff7f00 ff0    008000    0ff   00f         800080  fff 
 -->
