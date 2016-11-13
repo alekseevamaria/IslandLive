@@ -15,10 +15,14 @@
 </head>
 <body>
     <div>
-        <button id="step" style="width: auto;">Шаг</button>
-        <input type="text" id="stepInterval" value="1000"/>
-        <button id="auto" style="width: auto;">Автоматически</button>
-        <button id="stop" style="width: auto;">Стоп</button>
+        <div>
+            <button id="step" style="width: auto;">Шаг</button>
+            <input type="text" id="stepInterval" value="1000"/>
+            <button id="auto" style="width: auto;">Автоматически</button>
+        </div>
+        <div>
+            <button id="stop" style="width: auto;">Стоп</button>
+        </div>
     </div>
     <div>
         <div class="island-container"></div>
@@ -28,6 +32,6 @@
     </div>
 
     <!-- Контер для собственного контекстного меню. По умолчания - скрыт. -->
-    <div id="contextMenuId" style="position:absolute; top:0; left:0; border:1px solid #666; background-color:#CCC; display:none; float:left;"></div>
+    <div id="contextMenuId" class="context_menu" style="display:none;"></div>
 </body>
 </html>

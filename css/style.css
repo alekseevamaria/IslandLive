@@ -9,184 +9,14 @@ body
     background-color: #C7D1E1;
 }
 
-h3
-{
-    color: #918A8A;
-    font-size: 12px;
-    font-family: Arial, sans-serif;
-    font-weight: normal;
-    position: absolute;
-    bottom: 0;
-}
-
-a
-{
-    text-decoration: none;
-    color: black;
-}
-
-a:hover
-{
-    text-decoration: underline;
-    color: black;
-}
-
-a:active
-{
-    text-decoration: none;
-}
-
-a img
-{
-     border:0px;
-}
-
-li
-{
-    display: block;
-    list-style-type: none;
-    margin: 1px;
-}
-
-li:hover
-{    
-    border: 1px solid #AAD3FE;
-    background-color: #EFF6FE; 
-    margin: 0;
-}
-
-button
-{
-    width: 100%;
-}
-
-input
-{
-    width: 70px;
-}
-
-form div
-{
-    margin: 10px;
-}
-
-.close:hover
-{
-    text-decoration: none;
-}
-
-.pointer_list
-{
-    display: block;
-}
-
-.pointer:hover
-{    
-    cursor: pointer;
-    text-decoration: none;   
-}
-
-.filter_bttn
+.button
 {
     width: auto;    
     border: 1px solid #acacac;
     background-color: #eaeaea;
-    margin: 5px;
-    padding: 0 5px;
-}
-
-.filter_bttn:hover
-{ 
-    border: 1px solid #AAD3FE;
-    background-color: #EFF6FE;
-}
-
-.tools
-{
-    height: 111px;
-    background-color: #F5F6F7;   
-}
-
-.tools_block
-{
-    border-right: 1px solid #E2E3E4;
-    margin: 2px 0;
-    height: 80px;
-    position: relative;
-    padding: 11px 7px 0 7px;
-    min-width: 100px;
-}
-
-.nav
-{    
-    position: fixed;
-    left: 0;
-    z-index: 9990;
-    width: 100%;
-}
-
-.topNav
-{
-    background-color: #fff;
-    left: 0;
-    top: 0;
-    z-index: 9990;
-}
-
-.contain
-{
-    padding-top: 133px;
-}
-
-.linewidth-bttn
-{    
-    display: block;
-    margin: 20px 3px;
-    background-color: #1E395B;
-}
-
-.navList, .sublist
-{
-    position: absolute;
-    z-index: 10000;
-    background-color: #f5f6f7;
-    text-align: right;
-    width: 140px;
-}
-
-.filebutton
-{
-    height: 42px;
-    display: block;
-    width: 120px;
-    border: 1px solid #d4d3ce;
-    background-color: #f1f1f1;
-    margin: 2px;
-}
-
-#pixel1
-{
-    height: 1px;
-}
-
-#pixel3
-{
-    height: 3px;
-}
-
-#pixel5
-{
-    height: 5px;
-}
-
-#pixel8
-{
-    height: 8px;
-}
-
-.button
-{
-    border: 1px solid #F5F6F7;
+    margin: 0 0 5px;
+    padding: 5px;
+    cursor: pointer;
 }
 
 .button:hover
@@ -195,10 +25,20 @@ form div
     background-color: #EFF6FE;
 }
 
-.button_on
-{
-    border: 1px solid #65A6E7;
-    background-color: #C9E0F7;
+.context_menu {
+    position: absolute;
+    top: 0;
+    left: 0;
+    border: 1px solid #666;
+    background-color: #ccc;
+    float: left;
+    padding: 5px;
+}
+.linewidth-bttn
+{    
+    display: block;
+    margin: 20px 3px;
+    background-color: #1E395B;
 }
 
 .popup_bttn
@@ -212,164 +52,6 @@ form div
     height: 25px;
     border: 1px solid gray;
     padding: 4px;
-}
-
-.color
-{    
-    width: 21px;
-    height: 21px;
-}
-
-.saveform
-{
-    text-align: center;
-}
-
-#black
-{
-    background-color: #000;
-}
-
-#white
-{
-    background-color: #fff;
-}
-
-#gray
-{
-    background-color: #808080;
-}
-
-#maroon
-{
-    background-color: #800000;
-}
-
-#red
-{
-    background-color: #f00;
-}
-
-#orange
-{    
-    background-color: #ff7f00;
-}
-
-#yellow
-{
-    background-color: #ff0;
-}
-
-#green
-{
-    background-color: #008000;
-}
-
-#blue
-{
-    background-color: #0ff;
-}
-
-#dark-blue
-{
-    background-color: #00f; 
-}
-
-#purple
-{
-    background-color: #800080; 
-}
-
-.picker
-{
-    height: 20px;
-    border: 0;
-    border-right: 20px solid black;
-}
-
-.picker#picker2
-{
-    border-color: white;
-}
-
-canvas
-{
-    box-shadow: 9px 8px 5px rgba(0,0,0,0.2);
-    position: absolute;
-    left: 0;
-    top: 0;
-    background-color: #fff;
-}
-
-canvas#subLayer
-{
-    box-shadow: none;
-}
-
-.canvas_container
-{
-    position: relative;
-}
-
-.preloader_overlay
-{
-    background-color: rgba(0, 0, 0, 0.7);
-    position: fixed;
-    display: none;
-    opacity: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    top: 0;
-    z-index: 1;
-}
-
-.preloader_overlay_visible
-{
-    opacity: 1;
-    display: block;
-}
-
-.preloader
-{
-    left: 200px;
-    top: 300px;
-    position: relative;
-}
-
-.pencil
-{
-    cursor: url(../images/pencil_cursor.png), auto;
-}
-
-.eraser1
-{
-    cursor: url(../images/eraser_cursor4.png), auto;
-}
-
-.eraser3
-{
-    cursor: url(../images/eraser_cursor6.png), auto;
-}
-
-.eraser5
-{
-    cursor: url(../images/eraser_cursor8.png), auto;
-}
-
-.eraser8
-{
-    cursor: url(../images/eraser_cursor11.png), auto;
-}
-
-.rectangle
-{
-    cursor: crosshair;
-}
-
-.ellipse
-{
-    cursor: crosshair;
 }
 
 .left

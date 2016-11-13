@@ -82,7 +82,8 @@
     background-image: url('../images/icons/trava.png');
     display: none;
 }
-.grass.grass_1, .grass.grass_2, .grass.grass_3, .grass.grass_4, .grass.grass_5 {
+.grass.grass_1, .grass.grass_2, .grass.grass_3, .grass.grass_4, .grass.grass_5,
+.grass.grass_1_5, .grass.grass_2_5, .grass.grass_3_5, .grass.grass_4_5{
     display: block;
 }
 .grass.grass_1 {
@@ -101,6 +102,18 @@
     width: 100%;
 }
 
+.grass.grass_1_5 {
+    width: 30%;
+}
+.grass.grass_2_5 {
+    width: 50%;
+}
+.grass.grass_3_5 {
+    width: 70%;
+}
+.grass.grass_4_5 {
+    width: 90%;
+}
 
 .rabbit {
     position: absolute;

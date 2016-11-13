@@ -8,7 +8,9 @@ $(document).ready(function() {
 
     var island_state_Interval = null;
     function step(){
-        islandLive.step();
+        return islandLive.step();
+    }
+    function showStep(){
         $(".island-container").append(islandLive.getHtml());
         var curStep = islandLive.GetStepsCount();
         if ($('.island_state_' + (curStep-1)).length)
@@ -22,40 +24,106 @@ $(document).ready(function() {
         }
     }
 
+    var stepTitle = $('#step').html() + ' ';
+    var autoTitle = $('#auto').html() + ' ';
     $('#step').on('click', function(){
-        step();
+        var curStepTitle = step();
+        $('#step').html(stepTitle + curStepTitle);
+        $('#auto').html(autoTitle + curStepTitle);
+        showStep();
     });
     $('#auto').on('click', function(){
         island_state_Interval = setInterval(function () {
-            step();
+            var curStepTitle = step();
+            $('#step').html(stepTitle + curStepTitle);
+            $('#auto').html(autoTitle + curStepTitle);
+            showStep();
         }, $('#stepInterval').val());
     });
+
+    var curStepTitle = islandLive.getNextStep();
+    $('#step').html(stepTitle + curStepTitle);
+    $('#auto').html(autoTitle + curStepTitle);
+
     $('#stop').on('click', function(){
         clearInterval(island_state_Interval);
     });
 });
 
+function getCellSelector(step, j, i) {
+    return ".island_state_" + step + " .row_" + j + " .column_" + i + " .cell";
+}
 function landscapeChange(step, j, i) {
     var oldLandscape = islandLive.getLandscape(j, i);
     var newLandscape = islandLive.changeLandscape(j, i);
-    $(".island_state_" + step + " .row_" + j + " .column_" + i + " .cell").addClass(newLandscape);
-    $(".island_state_" + step + " .row_" + j + " .column_" + i + " .cell").removeClass(oldLandscape);
+    var cellSelector = getCellSelector(step, j, i);
+    var grassSelector = cellSelector + " .grass";
+    var rabbitSelector = cellSelector + " .rabbit";
+    $(cellSelector).addClass(newLandscape);
+    $(cellSelector).removeClass(oldLandscape);
 
     var grass = islandLive.getGrass(j, i);
-    $(".island_state_" + step + " .row_" + j + " .column_" + i + " .cell .grass").addClass('grass_'+grass);
-    $(".island_state_" + step + " .row_" + j + " .column_" + i + " .cell .grass").removeClass('grass_1');
-    $(".island_state_" + step + " .row_" + j + " .column_" + i + " .cell .grass").removeClass('grass_2');
-    $(".island_state_" + step + " .row_" + j + " .column_" + i + " .cell .grass").removeClass('grass_3');
-    $(".island_state_" + step + " .row_" + j + " .column_" + i + " .cell .grass").removeClass('grass_4');
-    $(".island_state_" + step + " .row_" + j + " .column_" + i + " .cell .grass").removeClass('grass_5');
+    $(grassSelector).addClass('grass_'+grass);
+    $(grassSelector).removeClass('grass_1');
+    $(grassSelector).removeClass('grass_2');
+    $(grassSelector).removeClass('grass_3');
+    $(grassSelector).removeClass('grass_4');
+    $(grassSelector).removeClass('grass_5');
+
+    var rabbit = islandLive.getRabbit(j, i);
+    $(rabbitSelector).addClass('rabbit_'+rabbit);
+    $(rabbitSelector).removeClass('rabbit_1');
+    $(rabbitSelector).removeClass('rabbit_2');
+    $(rabbitSelector).removeClass('rabbit_3');
 }
 
 function grassChange(step, j, i) {
     var oldGrass = islandLive.getGrass(j, i);
     var newGrass = islandLive.changeGrass(j, i);
-    $(".island_state_" + step + " .row_" + j + " .column_" + i + " .cell .grass").addClass('grass_'+newGrass);
-    $(".island_state_" + step + " .row_" + j + " .column_" + i + " .cell .grass").removeClass('grass_'+oldGrass);
+    if (newGrass == false)
+    {
+        return;
+    }
+    var cellSelector = getCellSelector(step, j, i);
+    var grassSelector = cellSelector + " .grass";
+    $(grassSelector).addClass('grass_'+newGrass);
+    $(grassSelector).removeClass('grass_'+oldGrass);
 }
+
+function rabbitChange(step, j, i)
+{
+    var oldRabbit = islandLive.getRabbit(j, i);
+    var newRabbit = islandLive.addRabbit(j, i);
+    if (newRabbit == false)
+    {
+        return;
+    }
+    var cellSelector = getCellSelector(step, j, i);
+    var rabbitSelector = cellSelector + " .rabbit";
+    $(rabbitSelector).addClass('rabbit_'+newRabbit);
+    $(rabbitSelector).removeClass('rabbit_'+oldRabbit);
+}
+
+function sunChange(step, j, i)
+{
+    var oldSun = islandLive.getSun(j, i);
+    var newSun = islandLive.addSun(j, i);
+    var cellSelector = getCellSelector(step, j, i);
+    var sunSelector = cellSelector + " .sun";
+    $(sunSelector).addClass('sun_'+newSun);
+    $(sunSelector).removeClass('sun_'+oldSun);
+}
+
+function rainChange(step, j, i)
+{
+    var oldRain = islandLive.getRain(j, i);
+    var newRain = islandLive.addRain(j, i);
+    var cellSelector = getCellSelector(step, j, i);
+    var rainSelector = cellSelector + " .rain";
+    $(rainSelector).addClass('rain_'+newRain);
+    $(rainSelector).removeClass('rain_'+oldRain);
+}
+
 
 function menu(step, j, i, evt) {
     // Блокируем всплывание события contextmenu
@@ -65,8 +133,11 @@ function menu(step, j, i, evt) {
     var menu = document.getElementById("contextMenuId");
     var html = "";
 
-    html = "<button onclick='landscapeChange("+step+", "+ j +", " + i +");'>Сменить ландшафт</button>";
-    html += "<button onclick='grassChange("+step+", "+ j +", " + i +");'>Изменить траву</button>";
+    html = "<button class='button' onclick='landscapeChange("+step+", "+ j +", " + i +");'>Сменить ландшафт</button><br>";
+    html += "<button class='button' onclick='grassChange("+step+", "+ j +", " + i +");'>Изменить траву</button><br>";
+    html += "<button class='button' onclick='rabbitChange("+step+", "+ j +", " + i +");'>Изменить кроликов</button><br>";
+    html += "<button class='button' onclick='sunChange("+step+", "+ j +", " + i +");'>Изменить солнце</button><br>";
+    html += "<button class='button' onclick='rainChange("+step+", "+ j +", " + i +");'>Изменить дождь</button><br>";
     html += '<br>';
 
     // Если есть что показать - показываем

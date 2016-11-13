@@ -23,6 +23,8 @@ var IslandLive = Base.extend({
 
     _current_state: [],
 
+    _current_step: false,
+
     constructor: function(rows, columns)
     {
         this._columns = (rows) ? rows : 5; // x
@@ -99,6 +101,16 @@ var IslandLive = Base.extend({
         return this._current_state[j][i]["rabbit"];
     },
 
+    getSun: function(j, i)
+    {
+        return this._current_state[j][i]["sun"];
+    },
+
+    getRain: function(j, i)
+    {
+        return this._current_state[j][i]["rain"];
+    },
+
     changeLandscape: function(j, i)
     {
         var oldLandscape = this._current_state[j][i]["landscape"];
@@ -121,6 +133,12 @@ var IslandLive = Base.extend({
 
     changeGrass: function(j, i)
     {
+        if (this._current_state[j][i]["landscape"] == this.TYPES[1] || this._current_state[j][i]["landscape"] == this.TYPES[2])
+        {
+            this._current_state[j][i]["grass"] = false; // not will change
+            return false;
+        }
+
         var oldGrass = this._current_state[j][i]["grass"];
         var newGrass = 4;
         if (oldGrass == 5)
@@ -137,11 +155,20 @@ var IslandLive = Base.extend({
 
     addRabbit: function(j, i)
     {
+        if (this._current_state[j][i]["landscape"] == this.TYPES[1] || this._current_state[j][i]["landscape"] == this.TYPES[2])
+        {
+            this._current_state[j][i]["rabbit"] = false; // not will change
+            return false;
+        }
+
         var oldRabbit = this._current_state[j][i]["rabbit"];
         var newRabbit = false;
         if (oldRabbit < 3)
         {
-            newRabbit++;
+            newRabbit = oldRabbit + 1;
+        }
+        else {
+            newRabbit = 0;
         }
         this._current_state[j][i]["rabbit"] = newRabbit;
         return newRabbit;
@@ -149,14 +176,54 @@ var IslandLive = Base.extend({
 
     deleteRabbit: function(j, i)
     {
+        if (this._current_state[j][i]["landscape"] == this.TYPES[1] || this._current_state[j][i]["landscape"] == this.TYPES[2])
+        {
+            this._current_state[j][i]["rabbit"] = false; // not will change
+            return false;
+        }
+
         var oldRabbit = this._current_state[j][i]["rabbit"];
         var newRabbit = false;
         if (oldRabbit > 0)
         {
             newRabbit--;
         }
+        else
+        {
+            newRabbit = 3;
+        }
         this._current_state[j][i]["rabbit"] = newRabbit;
         return newRabbit;
+    },
+
+    addSun: function(j, i)
+    {
+        var oldSun = this._current_state[j][i]["sun"];
+        var newSun = false;
+        if (oldSun < 3)
+        {
+            newSun = oldSun + 1;
+        }
+        else {
+            newSun = 0;
+        }
+        this._current_state[j][i]["sun"] = newSun;
+        return newSun;
+    },
+
+    addRain: function(j, i)
+    {
+        var oldRain = this._current_state[j][i]["rain"];
+        var newRain = false;
+        if (oldRain < 3)
+        {
+            newRain = oldRain + 1;
+        }
+        else {
+            newRain = 0;
+        }
+        this._current_state[j][i]["rain"] = newRain;
+        return newRain;
     },
 
     recalcNearWater: function()
@@ -210,6 +277,21 @@ var IslandLive = Base.extend({
         }
     },
 
+    calcWeatherStep: function (j, i)
+    {
+        this._current_state[j][i]["sun"] = getRandomInt(0,3); // will change rand 0...3
+        this._current_state[j][i]["rain"] = getRandomInt(0,3); // will change rand 0...3
+
+        if (this._current_state[j][i]["rain"] == 3)
+        {
+            this._current_state[j][i]["sun"] = 0;
+        }
+        if (this._current_state[j][i]["sun"] == 3)
+        {
+            this._current_state[j][i]["rain"] = 0;
+        }
+    },
+
     calcGrassStep: function(j, i)
     {
         if (this._current_state[j][i]["grass"] !== false)
@@ -240,84 +322,156 @@ var IslandLive = Base.extend({
 
     calcRabbitStep: function(j, i)
     {
-        if (this._current_state[j][i]["rabbit"] !== false)
+        if (this._current_state[j][i]["rabbit"] !== false && this._current_state[j][i]["rabbit"] > 0)
         {
             if (this._current_state[j][i]["rabbit"] == 2)
             {
                 this._current_state[j][i]["rabbit"]++;
             }
-            else if (this._current_state[j][i]["rabbit"] > 0 && this._current_state[j][i]["grass"] < this._current_state[j][i]["rabbit"])
+            else if (this._current_state[j][i]["grass"] >= this._current_state[j][i]["rabbit"])
             {
-                //найти в соседних траву, если нет до убить кролика.
-                var nearGrass = [];
-                var nearGrassCount = 0;
-                if (j > 0 && this._current_state[j-1][i]["grass"] > 0 && this._current_state[j-1][i]["rabbit"] < 3)
-                {
-                    nearGrass.push([j-1, i]);
-
-                    nearGrassCount += this._current_state[j-1][i]["grass"];
-                }
-                if (i > 0 && this._current_state[j][i-1]["grass"] > 0 && this._current_state[j][i-1]["rabbit"] < 3)
-                {
-                    nearGrass.push([j, i-1]);
-                    nearGrassCount += this._current_state[j][i-1]["grass"];
-                }
-                if (j < this._rows-1 && this._current_state[j+1][i]["grass"] > 0 && this._current_state[j+1][i]["rabbit"] < 3)
-                {
-                    nearGrass.push([j+1, i]);
-                    nearGrassCount += this._current_state[j+1][i]["grass"];
-                }
-                if (i+1 < this._columns && this._current_state[j][i+1]["grass"] > 0 && this._current_state[j][i+1]["rabbit"] < 3)
-                {
-                    nearGrass.push([j, i+1]);
-                    nearGrassCount += this._current_state[j][i+1]["grass"];
-                }
-
-                if (nearGrassCount > 0)
-                {
-                    /*распрдеить по соседним лишних кроликов*/
-                    var movingRabbits = this._current_state[j][i]["rabbit"] - this._current_state[j][i]["grass"];
-
-                    for (var i = 0; i < nearGrassCount, i < movingRabbits; i++)
-                    {
-                        this._current_state[nearGrass[i][0]][nearGrass[i][1]]["rabbit"]++;
-                    }
-                }
-                this._current_state[j][i]["rabbit"] = this._current_state[j][i]["grass"];
-                this._current_state[j][i]["grass"] = 0;
-            }
-            else if (this._current_state[j][i]["rabbit"] > 0 && this._current_state[j][i]["grass"] >= this._current_state[j][i]["rabbit"])
-            {
+                /*если травы столько же или больше кроликов, то все кролики выживут*/
                 this._current_state[j][i]["grass"] -= this._current_state[j][i]["rabbit"];
             }
+            else if (this._current_state[j][i]["grass"] < this._current_state[j][i]["rabbit"])
+            {
+                /**
+                 * прокормить на существующую траву
+                 */
+                var movingRabbits = this._current_state[j][i]["rabbit"] - this._current_state[j][i]["grass"];
+                this._current_state[j][i]["grass"] = 0;
+                /**
+                 * остальных кроликов либо переместить в соседних траву, свободную клетку либо убить
+                 */
+                this._current_state[j][i]["rabbit"] -= movingRabbits;
+                this.moveRabbits(j, i, movingRabbits);
+            }
+        }
+    },
+
+    moveRabbits: function(j, i, countRabbitsToMove)
+    {
+        var canMove = true;
+        var needNearRabbit = 3 - countRabbitsToMove;
+        if (j > 0 && (this._current_state[j-1][i]["rabbit"] > needNearRabbit || !this._current_state[j-1][i]["grass"]))
+        {
+            canMove = false;
+        }
+        if (i > 0 && (this._current_state[j][i-1]["rabbit"] > needNearRabbit || !this._current_state[j][i-1]["grass"]))
+        {
+            canMove = false;
+        }
+        if (j < this._rows-1 && (this._current_state[j+1][i]["rabbit"] > needNearRabbit || !this._current_state[j+1][i]["grass"]))
+        {
+            canMove = false;
+        }
+        if (i+1 < this._columns && (this._current_state[j][i+1]["rabbit"] > needNearRabbit || !this._current_state[j][i+1]["grass"]))
+        {
+            canMove = false;
+        }
+
+        if (canMove)
+        {
+            var nearGrass = [];
+            var nearGrassCount = 0;
+            if (j > 0 && this._current_state[j-1][i]["grass"] > 0 && this._current_state[j-1][i]["rabbit"] < 3)
+            {
+                var movingNearGrassCount = Math.min(3 - this._current_state[j-1][i]["rabbit"], this._current_state[j-1][i]["grass"]);
+                nearGrassCount += movingNearGrassCount;
+                nearGrass.push([j-1, i, movingNearGrassCount]);
+            }
+            if (i > 0 && this._current_state[j][i-1]["grass"] > 0 && this._current_state[j][i-1]["rabbit"] < 3)
+            {
+                var movingNearGrassCount = Math.min(3 - this._current_state[j][i-1]["rabbit"], this._current_state[j][i-1]["grass"]);
+                nearGrassCount += movingNearGrassCount;
+                nearGrass.push([j, i-1, movingNearGrassCount]);
+            }
+            if (j < this._rows-1 && this._current_state[j+1][i]["grass"] > 0 && this._current_state[j+1][i]["rabbit"] < 3)
+            {
+                var movingNearGrassCount = Math.min(3 - this._current_state[j+1][i]["rabbit"], this._current_state[j+1][i]["grass"]);
+                nearGrassCount += movingNearGrassCount;
+                nearGrass.push([j+1, i, movingNearGrassCount]);
+            }
+            if (i+1 < this._columns && this._current_state[j][i+1]["grass"] > 0 && this._current_state[j][i+1]["rabbit"] < 3)
+            {
+                var movingNearGrassCount = Math.min(3 - this._current_state[j][i+1]["rabbit"], this._current_state[j][i+1]["grass"]);
+                nearGrassCount += movingNearGrassCount;
+                nearGrass.push([j, i+1, movingNearGrassCount]);
+            }
+
+            if (nearGrassCount > 0)
+            {
+                /*распрдеить по соседним лишних кроликов*/
+               /* var movingRabbits = this._current_state[j][i]["rabbit"] - this._current_state[j][i]["grass"];
+
+                for (var i = 0; i < nearGrassCount, i < movingRabbits; i++)
+                {
+                    this._current_state[nearGrass[i][0]][nearGrass[i][1]]["rabbit"]++;
+                }*/
+            }
+        }
+        else
+        {
+            return 0;
+        }
+    },
+
+    getNextStep: function () {
+        if (this._current_step == 'grass')
+        {
+            return 'rabbit';
+        }
+        else if (this._current_step == 'rabbit')
+        {
+            return 'weather';
+        }
+        else
+        {
+            return 'grass';
         }
     },
 
     step: function()
     {
         this._i++;
-        //TODO: пройти по острову и в зависимости от натсроек  составить новое состояние
-        for (var j = 0; j < this._rows; j++)
+        if (this._current_step == false)
         {
-            for (var i = 0; i < this._columns; i++)
+            this._current_step = 'grass';
+        }
+
+        if (this._current_step == 'rabbit')
+        {
+            for (var j = 0; j < this._rows; j++)
             {
-                this.calcRabbitStep(j, i);
-                this.calcGrassStep(j, i);
-
-                this._current_state[j][i]["sun"] = getRandomInt(0,3); // will change rand 0...3
-                this._current_state[j][i]["rain"] = getRandomInt(0,3); // will change rand 0...3
-
-                if (this._current_state[j][i]["rain"] == 3)
+                for (var i = 0; i < this._columns; i++)
                 {
-                    this._current_state[j][i]["sun"] = 0;
-                }
-                if (this._current_state[j][i]["sun"] == 3)
-                {
-                    this._current_state[j][i]["rain"] = 0;
+                    this.calcRabbitStep(j, i);
                 }
             }
         }
-        return this._current_state;
+        else if (this._current_step == 'weather')
+        {
+            for (var j = 0; j < this._rows; j++)
+            {
+                for (var i = 0; i < this._columns; i++)
+                {
+                    this.calcWeatherStep(j, i);
+                }
+            }
+        }
+        else
+        {
+            for (var j = 0; j < this._rows; j++)
+            {
+                for (var i = 0; i < this._columns; i++)
+                {
+                    this.calcGrassStep(j, i);
+                }
+            }
+        }
+
+        this._current_step = this.getNextStep();
+        return this._current_step;
     },
 
     /**
@@ -334,7 +488,7 @@ var IslandLive = Base.extend({
     },
 
     getHtml: function() {
-        console.log(this._i);
+        //console.log(this._i);
         var islandHtml = "";
         islandHtml += '<table border="0" class="island_state island_state_'+this._i+'"><tbody>';
         for (var j = 0; j < this._current_state.length; j++)
